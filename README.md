@@ -7,6 +7,10 @@ This project was created to practice React Context API, reusable components, sta
 
 [View Live Project](https://to-do-two-vert.vercel.app/)
 
+## Screenshot
+
+![React Todo List Screenshot](./Screenshot.png)
+
 ## GitHub Repository
 
 [View Source Code](https://github.com/Annu9111/React-TODos)
