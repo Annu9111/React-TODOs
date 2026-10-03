@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 // import heroImg from './assets/hero.png'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from './assets/vite.svg'
@@ -7,22 +7,55 @@ import { TodoProvider } from './contexts'
 
 function App() {
   // const [count, setCount] = useState(0)
-  const [todos,setTodos] = useState([])
+  // const [todos,setTodos] = useState([])
+  const [todos, setTodos] = useState(() => {
+    const storedTodos = localStorage.getItem("todos")
+
+    return storedTodos ? JSON.parse(storedTodos) : []
+})
+
   const addTodo = (todo)=>{ 
     setTodos((prev)=> [{id:Date.now(),...todo}, ...prev])
   }
 
-  const updatedTodo =(id,todo)=>{
-    setTodos((prev)=>prev.map((prevTodo)=>(prevTodo.id ===id? todo:prevTodo)))
-  }
+  const updatedTodo = (id, todo) => {
+    setTodos((prev) =>
+        prev.map((prevTodo) =>
+            prevTodo.id === id
+                ? { ...prevTodo, ...todo }
+                : prevTodo
+        )
+    )
+}
 
   const deleteTodo = (id)=>{
-    setTodos((prev)=>prev.filter((todo)=>todo.id !=id))
+    setTodos((prev)=>prev.filter((todo)=>todo.id !==id))
   }
 
-  const toggleComplete =(id) =>{
-    setTodos((prev)=>prev.map((prevTodo)=>prevTodo===id ? {...prevTodo,completed:!prevTodo.completed }:prevTodo))
-  }
+ const toggleComplete = (id) => {
+    setTodos((prev) =>
+        prev.map((prevTodo) =>
+            prevTodo.id === id
+                ? {
+                    ...prevTodo,
+                    completed: !prevTodo.completed
+                }
+                : prevTodo
+        )
+    )
+}
+
+// useEffect(()=>{
+//     const todos=JSON.parse(localStorage.getItem("todos"))
+//     if(todos &&todos.length>0){
+//       setTodos(todos)
+//     }
+// },[])
+
+useEffect(()=>{
+  localStorage.setItem("todos",JSON.stringify(todos ))
+},[todos])
+
 
   return (
     <TodoProvider value={{todos,addTodo,updatedTodo,deleteTodo,toggleComplete }} >
